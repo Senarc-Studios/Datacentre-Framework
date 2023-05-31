@@ -1,0 +1,9 @@
+[Unit]
+Description=Better Uptime.
+
+[Service]
+ExecStart=/bin/python3 /root/heartbeat/worker.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
