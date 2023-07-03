@@ -23,7 +23,7 @@ echo "   ░          ░  ░              ░  ░ ░        ░  ░        
 echo " ░                                 ░                                                 ";
 echo "";
 
-version="1.4.0"
+version="1.4.0-1"
 
 echo "You are running setup version: ${version}";
 echo "";
@@ -33,6 +33,10 @@ echo "[?] Server Name:";
 read server
 CodeName="${server,,}"
 ServerName="${server^}"
+
+echo "[+] Installing Dependencies."
+apt update && apt install sudo git neovim zsh -y
+
 sudo rm /etc/hostname
 sudo echo "$ServerName" > /etc/hostname
 echo "[+] Modified hostname."
@@ -56,7 +60,7 @@ sudo chmod 700 /home/*
 echo "[-] Restricting Users from accessing other user's folders."
 sudo cp ./sshd_config /etc/ssh/sshd_config
 echo "[+] Updating sshd service config."
-sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -
 sudo apt install python3 python3-pip zsh exa git -y
 echo "[+] Installed Python3 and Pip."
 sudo cp ./heartbeat.service /etc/systemd/system
@@ -74,7 +78,6 @@ echo "[!] Reloaded systemctl daemon."
 systemctl start heartbeat
 systemctl enable heartbeat
 echo "[+] Started Uptime Heartbeat."
-echo "[+] Installing ZSH."
 echo "[!] Configuring ZSH."
 cp -r ./.* ~
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
