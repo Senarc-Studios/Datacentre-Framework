@@ -23,7 +23,7 @@ echo "   ░          ░  ░              ░  ░ ░        ░  ░        
 echo " ░                                 ░                                                 ";
 echo "";
 
-version="1.4.0-1"
+version="1.4.0-2"
 
 echo "You are running setup version: ${version}";
 echo "";
@@ -35,10 +35,11 @@ CodeName="${server,,}"
 ServerName="${server^}"
 
 echo "[+] Installing Dependencies."
-apt update && apt install sudo git neovim zsh -y
+apt update && apt upgrade -y
+apt install python3 python3-pip zsh exa git -y
 
-sudo rm /etc/hostname
-sudo echo "$ServerName" > /etc/hostname
+rm /etc/hostname
+echo "$ServerName" > /etc/hostname
 echo "[+] Modified hostname."
 echo "
 ip=\`echo \$SSH_CONNECTION | cut -d ' ' -f 1\`
@@ -52,18 +53,16 @@ curl --silent -v \\
 `cat ./webhook.env` > /dev/null 2>&1
 " > /etc/ssh/sshrc
 echo "[+] Added SSH notification."
-sudo cp ./sudoers /etc/sudoers
+cp ./sudoers /etc/sudoers
 echo "[+] Modified sudoers file."
-sudo cp ./motd /etc/motd
+cp ./motd /etc/motd
 echo "[+] Updating MOTD message."
-sudo chmod 700 /home/*
+chmod 700 /home/*
 echo "[-] Restricting Users from accessing other user's folders."
-sudo cp ./sshd_config /etc/ssh/sshd_config
+cp ./sshd_config /etc/ssh/sshd_config
 echo "[+] Updating sshd service config."
-sudo apt update && sudo apt upgrade -
-sudo apt install python3 python3-pip zsh exa git -y
 echo "[+] Installed Python3 and Pip."
-sudo cp ./heartbeat.service /etc/systemd/system
+cp ./heartbeat.service /etc/systemd/system
 echo "[+] Added Uptime Service File."
 mkdir /root/heartbeat
 echo "[+] Created Heartbeat folder."
@@ -83,7 +82,6 @@ cp -r ./.* ~
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
 echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 echo "[!] Changing default shell to zsh."
-sudo chsh -s /bin/zsh
 chsh -s /bin/zsh
 echo "[!] Restarting zsh."
 echo "[!] Setup Complete!"
